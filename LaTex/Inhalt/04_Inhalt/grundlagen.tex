@@ -5,96 +5,142 @@ Besonderer Fokus wird dabei auf das mathematische Verständnis gelegt, da im wei
 
 \section{Agenten}
 
-In der Literatur gibt es keine eindeutige Definition für einen Agenten, allerdings existiert eine generelle Überschneidung dahingehend, dass ein intelligenter Agent alles sein kann, was seine Umgebung über Sensoren wahrnimmt und diese über Aktoren beeinflussen kann.
-Um diese sehr generelle Beschreibung in ein konkretes Beispiel zu überführen, kann beispielhaft ein Roboter benutzt werden, dessen Aufgabe es ist, einen bestimmten Gegenstand anzuheben. Der Roboter nimmt seine Umgebung über eine Vielzahl von Sensoren wie \zB Kameras, Abstandsmesser oder ähnliches war. Diese Umgebung kann er \zB über einen oder mehrere Greifarme (Aktoren) beeinflussen. Der Roboter muss u.a. anhand der empfangenen Sensordaten die nächste Entscheidung treffen, um sein Ziel zu erreichen.
-Abbildung \ref{fig:basics:agent} veranschaulicht das generelle Prinzip erneut anhand eines Flussdiagramms.
-Im Verlauf dieser Arbeit wird neben der Anzahl und Komplexität der verschiedenen Aktoren auch die Größe und Wahrnehmbarkeit der Umgebung eine immer wichtigere Rolle bekommen,
+	In der Literatur gibt es keine eindeutige Definition für einen Agenten, allerdings existiert eine generelle Überschneidung dahingehend, dass ein intelligenter Agent alles sein kann, was seine Umgebung über Sensoren wahrnimmt und diese über Aktoren beeinflussen kann.
+	Um diese sehr generelle Beschreibung in ein konkretes Beispiel zu überführen, kann beispielhaft ein Roboter benutzt werden, dessen Aufgabe es ist, einen bestimmten Gegenstand anzuheben. Der Roboter nimmt seine Umgebung über eine Vielzahl von Sensoren wie \zB Kameras, Abstandsmesser oder ähnliches war. Diese Umgebung kann er \zB über einen oder mehrere Greifarme (Aktoren) beeinflussen. Der Roboter muss u.a. anhand der empfangenen Sensordaten die nächste Entscheidung treffen, um sein Ziel zu erreichen.
+	Abbildung \ref{fig:basics:agent} veranschaulicht das generelle Prinzip erneut anhand eines Flussdiagramms.
+	Im Verlauf dieser Arbeit wird neben der Anzahl und Komplexität der verschiedenen Aktoren auch die Größe und Wahrnehmbarkeit der Umgebung eine immer wichtigere Rolle bekommen,
 
-\begin{itemize}
-	\item da diese in ihrer Größe und Form nicht beschränkt ist. Die Umgebung kann \zB von der Größe eines Raumes bis hin zum gesamten Universum reichen.
-	\item da die Umgebung häufig nicht vollständig von den Sensoren erfasst werden kann und der Agent so nur einen eingeschränkten Teil der Umgebung wahrnimmt.
-\end{itemize}
+	\begin{itemize}
+		\item da diese in ihrer Größe und Form nicht beschränkt ist. Die Umgebung kann \zB von der Größe eines Raumes bis hin zum gesamten Universum reichen.
+		\item da die Umgebung häufig nicht vollständig von den Sensoren erfasst werden kann und der Agent so nur einen eingeschränkten Teil der Umgebung wahrnimmt.
+	\end{itemize}
 
-\begin{figure}[ht!]
-	\centering
-	\scalebox{1.25}{	
-\begin{tikzpicture}[
-	node distance=7mm,
-	title/.style={font=\fontsize{12}{14}\color{black!100}\ttfamily},
-	box/.style={rectangle, draw=black!50, anchor=west}
-	]
-	%\node[title] (agent) {};
+	\begin{figure}[ht!]
+		\centering
+		\scalebox{1.25}{	
+	\begin{tikzpicture}[
+		node distance=7mm,
+		title/.style={font=\fontsize{12}{14}\color{black!100}\ttfamily},
+		box/.style={rectangle, draw=black!50, anchor=west}
+		]
+		%\node[title] (agent) {};
+		
+		%\node[box, below=of agent.east, xshift=5mm] (sensors) {Sensoren};
+		\node[box] (sensors) {Sensoren};
+		\node[draw=black!50, rectangle, below=of sensors] (magic) {Entscheidungslogik};
+		\node[box, below=of magic] (acts) {Aktoren};
+		\node [inner sep=10pt, minimum width=6cm, draw=black!50, fit={(sensors) (magic) (acts)}] (agent) {};
+		\node[anchor=north west, title] at (agent.north west) {Agent};
+		
+		\node[draw=black!50, rectangle, right=of agent, inner sep=10pt] (env) {Umgebung};
+		
+		\draw[->] (sensors) -- (magic);
+		\draw[->] (magic) -- (acts);
+		
+		\draw[->] (acts) -| (env) node[below left=1.3cm and 0.4cm, font=\small] (lbacts) {Aktion};
+		\draw[->] (env) |- (sensors) node[above=2.6cm of lbacts, font=\small] {Auswerten};
+	\end{tikzpicture}
+	}
+		\caption{Die Interaktion eines Agenten mit seiner Umgebung.}
+		\label{fig:basics:agent}
+	\end{figure}
+	\todo{Entscheidungslogik richtig?}
+	\todo{Quellen, Grafik}
 	
-	%\node[box, below=of agent.east, xshift=5mm] (sensors) {Sensoren};
-	\node[box] (sensors) {Sensoren};
-	\node[draw=black!50, rectangle, below=of sensors] (magic) {Entscheidungslogik};
-	\node[box, below=of magic] (acts) {Aktoren};
-	\node [inner sep=10pt, minimum width=6cm, draw=black!50, fit={(sensors) (magic) (acts)}] (agent) {};
-	\node[anchor=north west, title] at (agent.north west) {Agent};
-	
-	\node[draw=black!50, rectangle, right=of agent, inner sep=10pt] (env) {Umgebung};
-	
-	\draw[->] (sensors) -- (magic);
-	\draw[->] (magic) -- (acts);
-	
-	\draw[->] (acts) -| (env) node[below left=1.3cm and 0.4cm, font=\small] (lbacts) {Aktion};
-	\draw[->] (env) |- (sensors) node[above=2.6cm of lbacts, font=\small] {Auswerten};
-\end{tikzpicture}
-}
-	\caption{Die Interaktion eines Agenten mit seiner Umgebung.}
-	\label{fig:basics:agent}
-\end{figure}
-\todo{Entscheidungslogik richtig?}
-\todo{Quellen, Grafik}
-
-Wie in Abbildung \ref{fig:basics:agent} dargestellt ist, nimmt der Agent seine Übergebung über seine Sensoren war und versucht anhand dieser eine Handlungsentscheidung zu treffen. Diese Entscheidung wird anschließend in konkrete Aktionen übersetzt, die die Umgebung zum Vorteil des Agenten verändern sollen.
-Welche konkrete Ausprägung die Entscheidungslogik dabei annimmt ist abhängig vom Aufbau und Typ des Agenten. \todo{Verweis auf weitere Quellen}
+	Wie in Abbildung \ref{fig:basics:agent} dargestellt ist, nimmt der Agent seine Übergebung über seine Sensoren war und versucht anhand dieser eine Handlungsentscheidung zu treffen. Diese Entscheidung wird anschließend in konkrete Aktionen übersetzt, die die Umgebung zum Vorteil des Agenten verändern sollen.
+	Welche konkrete Ausprägung die Entscheidungslogik dabei annimmt ist abhängig vom Aufbau und Typ des Agenten. \todo{Verweis auf weitere Quellen}
 
 \section{Verhalten eines Agenten}
-\label{chap:basics:behaviour}
-
-Aufbauend auf der Definition eines Agenten und seinen Möglichkeiten, über Sensoren die Umgebung wahrzunehmen und durch Aktoren zu verändern, kann nun das Verhalten festgelegt werden. Durch jede Aktion, die der Agent durchführt, wird der Zustand seiner Umgebung auf eine bestimmte, eventuell unerwünschte Weise verändert. Anders als bei Menschen oder anderen Lebewesen, die ihre eigenen Ansichten und Vorstellung von einem erwünschten Endergebnis haben, ist dies bei Agenten nicht der Fall.
-\todo{Erweitern}
-
-Aus diesem Grund muss derjenige, der den Agenten und damit dessen eigentliches Ziel entwirft, besonders auf die korrekte Messung des Erfolges acht geben, denn dies kann mitunter eine große Herausforderung darstellen. 
-Ob der Agent einen gewünschten Zustand durch eine Aktion erreicht hat, wird ihm entweder durch eine Belohnung (Reward) oder eine Bestrafung (Penalty) mitgeteilt. Im allgemeinen wird diese Bewertung auch als \textit{Performance Measure} bezeichnet und gibt dem Agenten ein entsprechendes Feedback, ob er durch sein Handeln einen gewünschten Zustand erreicht hat.
-Ziel eines \textit{rationalen} Agenten ist es stets, die Summe seiner Belohnungen zu maximieren.  
-
-Ein Agent, welcher \zB Schach spielt, könnte am Ende der Partie eine Belohnung von einem Punkt bekommen, bei einer Niederlage entsprechend einen Punkt abgezogen. Das Ziel des Agenten ist es in diesem Kontext, möglichst viele Partien zu gewinnen, um seine Belohnungen zu maximieren. 
-Bei der Formulierung einen solchen Zieles kann mitunter der Fehler passieren, dass der Designer über die Belohnungen versucht, einen bestimmten \textit{Weg} vorzugeben, wie der Agent gewinnen soll. In diesem einfachen Beispiel kann es \zB eine zusätzliche Belohnung für das eliminieren der gegnerischen Dame geben, allerdings könnten bei diesem Vorgehen Probleme auftreten. Der Agent würde unter Umständen Wege finden, die Dame zu eliminieren, um eine bestimmte Belohnung zu bekommen, allerdings das übergeordnete Ziel - den Sieg der Partie - vernachlässigen.
-%https://ai.stanford.edu/%7Eang/papers/icml04-apprentice.pdf
-
-\todo{Erweitern: Agent entscheidet nur aufgrund der Sensoren oder auch mit vergangenem Wissen}
+	\label{chap:basics:behaviour}
+	
+	Aufbauend auf der Definition eines Agenten und seinen Möglichkeiten, über Sensoren die Umgebung wahrzunehmen und durch Aktoren zu verändern, kann nun das Verhalten festgelegt werden. Durch jede Aktion, die der Agent durchführt, wird der Zustand seiner Umgebung auf eine bestimmte, eventuell unerwünschte Weise verändert. Anders als bei Menschen oder anderen Lebewesen, die ihre eigenen Ansichten und Vorstellung von einem erwünschten Endergebnis haben, ist dies bei Agenten nicht der Fall.
+	\todo{Erweitern}
+	
+	Aus diesem Grund muss derjenige, der den Agenten und damit dessen eigentliches Ziel entwirft, besonders auf die korrekte Messung des Erfolges acht geben, denn dies kann mitunter eine große Herausforderung darstellen. 
+	Ob der Agent einen gewünschten Zustand durch eine Aktion erreicht hat, wird ihm entweder durch eine Belohnung (Reward) oder eine Bestrafung (Penalty) mitgeteilt. Im allgemeinen wird diese Bewertung auch als \textit{Performance Measure} bezeichnet und gibt dem Agenten ein entsprechendes Feedback, ob er durch sein Handeln einen gewünschten Zustand erreicht hat.
+	Ziel eines \textit{rationalen} Agenten ist es stets, die Summe seiner Belohnungen zu maximieren.  
+	
+	Ein Agent, welcher \zB Schach spielt, könnte am Ende der Partie eine Belohnung von einem Punkt bekommen, bei einer Niederlage entsprechend einen Punkt abgezogen. Das Ziel des Agenten ist es in diesem Kontext, möglichst viele Partien zu gewinnen, um seine Belohnungen zu maximieren. 
+	Bei der Formulierung einen solchen Zieles kann mitunter der Fehler passieren, dass der Designer über die Belohnungen versucht, einen bestimmten \textit{Weg} vorzugeben, wie der Agent gewinnen soll. In diesem einfachen Beispiel kann es \zB eine zusätzliche Belohnung für das eliminieren der gegnerischen Dame geben, allerdings könnten bei diesem Vorgehen Probleme auftreten. Der Agent würde unter Umständen Wege finden, die Dame zu eliminieren, um eine bestimmte Belohnung zu bekommen, allerdings das übergeordnete Ziel - den Sieg der Partie - vernachlässigen.
+	%https://ai.stanford.edu/%7Eang/papers/icml04-apprentice.pdf
+	
+	\todo{Erweitern: Agent entscheidet nur aufgrund der Sensoren oder auch mit vergangenem Wissen}
 
 \section{Reinforcement Learning}
 
-Das Reinforcement Learning stellt eine Reihe von Methoden zur Verfügung, damit ein Agent selbstständig lernen kann, wie er seinen akkumulierten Belohnungen maximiert. Dies ist besonders dann von großem Vorteil, wenn der Agent einer sich stetig ändernden, oder für ihn völlig unbekannten Umgebung ausgesetzt ist, da er sich selbstständig an die neuen Bedingungen anpassen kann. Die sehr abstrakte Belohnungs bzw. Bestrafungsmechanik aus Sektion \ref{chap:basics:behaviour} wird im folgenden konkretisiert und mathematisch beschrieben.
-Die algorithmische Betrachtung des \textit{Lernens} für Agenten wird hingegen in Kapitel \ref{chap:learning} stark vertieft.
+	Das Reinforcement Learning stellt eine Reihe von Methoden zur Verfügung, damit ein Agent selbstständig lernen kann, wie er seinen akkumulierten Belohnungen maximiert. Dies ist besonders dann von großem Vorteil, wenn der Agent einer sich stetig ändernden, oder für ihn völlig unbekannten Umgebung ausgesetzt ist, da er sich selbstständig an die neuen Bedingungen anpassen kann. Die sehr abstrakte Belohnungs bzw. Bestrafungsmechanik aus Sektion \ref{chap:basics:behaviour} wird im folgenden konkretisiert und mathematisch beschrieben.
+	Die algorithmische Betrachtung des \textit{Lernens} für Agenten wird hingegen in Kapitel \ref{chap:learning} stark vertieft.
 
-\subsection{\acf{MDP}}
+	\subsection{Interaktion eines Agenten mit seiner Umgebung}
+	\label{chap:basics:rl:interaction}
+	
+		Die generelle Funktionsweise der Interaktion zwischen einem Agenten und seiner Umgebung ist in Abbildung \ref{fig.basics:rl:mdp} dargestellt.
+		Die \textbf{Umgebung (Environment)} liefert bestimmte Signale an den Agenten, auf dessen Basis dieser Entscheidungen bzw. \textit{Actions} durchführt. Zu den Signalen gehören u.a. eines für den aktuellen \textbf{Zustand (State)}, welches die aktuelle Lage der Umgebung darstellt.
+		Ein weiteres Signal ist das \textbf{Belohnungssignal} bzw. der Reward und dient dem Agenten als \textit{Feedback}, wie gut die von ihm ausgewählte Aktion im aktuellen Zustand war.
+		Wie in der vorherigen Sektion bereits beschrieben, versucht der Agent diesen Reward auf Dauer zu \textbf{maximieren}.
+		Generell finden diese Interaktionen zwischen Agent und Umgebung zu diskreten Zeitpunkten $t \in \mathbb{N}$ statt. Zu jedem dieser Zeitpunkt führt der Agent eine Aktion aus, worauf die Umgebung als Konsequenz in einen neuen Zustand übergeht und gleichzeitig ein Belohnungssignal sendet.
+		
+		Diese informelle Beschreibung der Interaktion wird im Folgenden anhand Abbildung \ref{fig.basics:rl:mdp} formalisiert und mathematisch beschrieben.
+		
+		\begin{itemize}
+			\item $S_t$ beschreibt mit $S_t \in \mathcal{S}$ den Zustand, in dem sich die Umgebung aktuell befindet. Die Menge $\mathcal{S}$ beinhaltet alle möglichen Zustände.
+			\item Die Aktion $A_t \in \mathcal{A}(S_t)$, wobei $\mathcal{A}(S_t)$ alle möglichen Aktionen beinhaltet, die in Zustand $S_t$ möglich sind, ist die Aktion, die als Reaktion auf den aktuellen Zustand ausgeführt wird.
+			\item Als Konsequenz dieser Aktion reagiert die Umgebung mit einem Belohnungssignal $R_{t+1} \in \mathcal{R}$, welches dem Agenten als Feedback dient.
+		\end{itemize}
+		
+		%Der Agent und die Umgebung (\textit{Environment}) interagieren zu bestimmten Zeitpunkten $t \in \mathbb{N}$ miteinander. In jeden Zeitpunkt $t$ teilt die Umgebung dem Agenten einen bestimmten Zustand $S_t \in \mathcal{S}$ mit, in dem diese sich gerade befindet.
+		%$\mathcal{S}$ ist dabei die Menge aller möglichen Zustände.
+		%Basierend auf dem erhaltenen Zustand führt der Agent anschließend die Aktion $A_t \in \mathcal{A}(S_t)$ aus, wobei $\mathcal{A}(S_t)$ für die Menge der möglichen Aktionen steht, die der Agent im Zustand $S_t$ ausführen kann.
+		%Im darauffolgenden Zeitschritt $t + 1$ wird dem Agenten gleichzeitig mit der Belohnung bzw. Bestrafung $R_{t+1} \in \mathcal{R}$ der neuen Zustand $S_{t+1}$ der Umgebung mitgeteilt.
 
-Mithilfe des Markov-Entcheidungsprozesses ist es möglich, viele verschiedene Probleme des Reinforcement-Learning zu modellieren. Die generelle Funktionsweise des Prozesses ist in Abbildung \ref{fig.basics:rl:mdp} dargestellt.
-Der Agent und die Umgebung (\textit{Environment}) interagieren zu bestimmten Zeitpunkten $t \in \mathbb{N}$ miteinander. In jeden Zeitpunkt $t$ teilt die Umgebung dem Agenten einen bestimmten Zustand $S_t \in \mathcal{S}$ mit, in dem diese sich gerade befindet.
-$\mathcal{S}$ ist dabei die Menge aller möglichen Zustände.
-Basierend auf dem erhaltenen Zustand führt der Agent anschließend die Aktion $A_t \in \mathcal{A}(S_t)$ aus, wobei $\mathcal{A}(S_t)$ für die Menge der möglichen Aktionen steht, die der Agent im Zustand $S_t$ ausführen kann.
-Im darauffolgenden Zeitschritt $t + 1$ wird dem Agenten gleichzeitig mit der Belohnung bzw. Bestrafung $R_{t+1} \in \mathbb{R}$ der neuen Zustand $S_{t+1}$ der Umgebung mitgeteilt.
+		% https://commons.wikimedia.org/wiki/File:Markov_diagram_v2.svg
+		\begin{figure}[ht!]
+			\centering
+			\includegraphics[scale=0.2]{Bilder/markov_diagram}
+			\caption{Interaktion zwischen einem Agenten und seiner Umgebung im Reinforcement Learning.}
+			\label{fig.basics:rl:mdp}
+		\end{figure}
+	
+		Die Entscheidung, welche Aktion in welchem Zustand ausgewählt wird, ist über die \textit{Policy} $\Pi_t$ des Agenten realisiert. $\Pi_t(a | s)$ ist dabei die Wahrscheinlichkeit, dass $A_t = a$, unter der Voraussetzung $S_t = s$. Vereinfacht ausgedrückt beschreibt $\Pi_t(a | s)$ damit die Wahrscheinlichkeit, dass zum Zeitpunkt $t$ im Zustand $s$ die Aktion $a$ gewählt wird.
+		
+		Ferner ist eine Historie $h_t = (S_0, A_0, R_1, S_1, A_1, ..., R_t, S_t)$ definiert, welche alle vergangenen Zustände, getroffenen Aktionen und erhaltene Belohnungssignale bis zum Zeitpunkt $t$ aufzeichnet.
+		
+		\FloatBarrier
 
-% https://commons.wikimedia.org/wiki/File:Markov_diagram_v2.svg
-\begin{figure}[ht!]
-	\centering
-	\includegraphics[scale=0.2]{Bilder/markov_diagram}
-	\caption{Funktionsweise des Markov-Entscheidungsprozesses im Reinforcement Learning.}
-	\label{fig.basics:rl:mdp}
-\end{figure}
+	\subsection{\acf{MDP}}
+		
+		Mithilfe des Markov-Entcheidungsprozesses ist es möglich, die in Sektion \ref{chap:basics:rl:interaction} beschriebene Interaktion für viele verschiedene Probleme des Reinforcement-Learning zu modellieren und mathematisch zu beschreiben. Aus Sicht eines Agenten lässt sich dadurch die Umgebung formal erfassen.
+		
+		Für \textit{endliche MDP} besitzen die Zufallsvariablen $S_t$ und $R_t$ wohldefinierte, diskrete Zufallsverteilungen, die nur vom vorherigen Zustand und der gewählten Aktion abhängen.
+		Die Wahrscheinlichkeit, dass zu einem bestimmten Zeitpunkt $t$ die beiden Zufallsvariablen die konkreten Werte $s' \in \mathcal{S}$ und $r \in \mathcal{R}$ annehmen, ist über die Funktion $p: \mathcal{S} \times \mathcal{R} \times \mathcal{S} \times \mathcal{A} \rightarrow [0, 1]$ definiert.
+		\todo{Endliche MDP Definieren}
+		
+		\begin{equation}
+			p(s', r | s, a) = Pr[ S_t = s', R_t = r | S_{t-1} = s, A_{t-1} = a ]
+		\end{equation}
+	
+		Aus dieser kompakten Funktion ist es nun u.a möglich, weiteren benötigte Funktionen zu bestimmen bzw. herzuleiten. 
+		\todo{Erweitern}
+		
+		\subsubsection{Markov-Eigenschaft}
+		
+			Die Markov-Eigenschaft ist eine wichtige Bedingung für viele Algorithmen und beschreibt, dass für die Vorhersage, welchen Zustand $S_{t+1}$ die Umgebung als Reaktion auf die Aktion $A_t$ annimmt, der geghenwärtige Zustand $S_t$ ausreichend ist. Die Übergangswahrscheinlichkeit vom gegenwärtigen Zustand zum nachgolfenen ist somit unabhängig von der Vergangenheit, die in der Historie erfasst ist.
+			Dies bedeutet, dass jeder Zustand \textit{implizit} bereits alle nötigen Informationen mitführt, die für die Zukunft relevant sind.
+			In Formel \ref{eq:markov-property} ist diese informelle Beschreibung noch einmal mathematisch formuliert.
+			
+			\begin{equation} \label{eq:markov-property}
+				Pr[S_{t+1} | S_t = s, A_t = a] = Pr[S_{t+1} | h_t, A_t]
+			\end{equation}
+			
+			Jede Umgebung, die diese Eigenschaft erfüllt, kann als \ac{MDP} modelliert werden.
 
-Die Entscheidung, welche Aktion in welchem Zustand ausgewählt wird, ist über die \textit{Policy} $\Pi_t$ des Agenten realisiert. $\Pi_t(a, s)$ ist dabei die Wahrscheinlichkeit, dass $A_t = a$, unter der Voraussetzung $S_t = s$. Vereinfacht ausgedrückt beschreibt $\Pi_t(a, s)$ damit die Wahrscheinlichkeit, dass zum Zeitpunkt $t$ im Zustand $s$ die Aktion $a$ gewählt wird.
 
+\section{\aclp{MAS}}
 
+	Für Systeme, in denen mehrere Agenten die Umgebung durch ihre Aktionen beiinflussen, kann die Agent-Umgebung Interaktion aus Abbildung \ref{fig:basics:agent} entsprechend erweitert werden.
 
-\subsubsection{Markov-Eigenschaft}
+	\subsection{}
 
-Die Markov-Eigenschaft ist ein zentraler Bestandteil des \ac{MDP} und beschreibt 
-
-\subsection{Bellman Gleichungen}
-
-\section{}
+	\subsection{Herausforderungen}
+	
+	
